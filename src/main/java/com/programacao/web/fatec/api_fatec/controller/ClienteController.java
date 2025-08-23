@@ -2,11 +2,15 @@ package com.programacao.web.fatec.api_fatec.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.programacao.web.fatec.api_fatec.domain.cliente.ClienteRepository;
 import com.programacao.web.fatec.api_fatec.entities.Cliente;
+
+import jakarta.annotation.PostConstruct;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,24 +20,29 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
-
-
-
-
 @RestController
 @RequestMapping("/api/clientes")
 public class ClienteController {
     private final List<Cliente> listaDeCliente = new ArrayList<>();
 
+    @Autowired
+    private ClienteRepository clienteRepository;
+
     public ClienteController(){
-        listaDeCliente.add(new Cliente(1L, "Betera"));
-        listaDeCliente.add(new Cliente(2L, "Jerine"));
+        listaDeCliente.add(new Cliente(1L, "Betera", "Rua Jaraguará"));
+        listaDeCliente.add(new Cliente(2L, "Jerine", "Av. dos Lagos Secos"));
         //Exemplo set
         //Cliente cliente2 = new Cliente();
         //Cliente2.setId(2L);
         //Cliente2.setNome("Jerine");
         //listaDeCliente.add(Cliente2);
     } 
+
+    @PostConstruct
+    public void dadosiniciais(){
+        clienteRepository.save(new Cliente(null, "Betera", "Rua Jaraguará"));
+        clienteRepository.save(new Cliente(null, "Jerine", "Av. dos Lagos Secos"));
+    }
 
     @GetMapping("/testeCliente1") //-> /api/clientes/testeCliente1
     public String TesteClient(){
@@ -55,7 +64,10 @@ public class ClienteController {
 
     @GetMapping("/listarClientes")
     public List<Cliente> listarClientes() {
-        return listaDeCliente;
+        //return listaDeCliente -usando o array;
+        var clientes = clienteRepository.findAll();
+
+        return clientes;
     }
     
     @PostMapping("")
