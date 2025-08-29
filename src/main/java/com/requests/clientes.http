@@ -42,3 +42,25 @@ Content-Type: application/json
   "id": 3,
   "nome": "Abiguer"
 }
+###H2 Get
+GET http://localhost:8082/api/clientes
+
+###H2 Post
+POST http://localhost:8082/api/clientes
+Content-Type: application/json
+
+{
+  "nome": "Leterino",
+  "endereco": "Colina plana"
+}
+###H2 Put
+PUT http://localhost:8082/api/clientes/5
+Content-Type: application/json
+
+{
+  "id": 5,
+  "nome": "Leterino",
+  "endereco": "Colina muito plana mesmo"
+}
+###H2 Delete
+DELETE http://localhost:8082/api/clientes/3

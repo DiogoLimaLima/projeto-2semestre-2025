@@ -38,13 +38,13 @@ public class ClienteController {
         //Cliente2.setNome("Jerine");
         //listaDeCliente.add(Cliente2);
     } 
-
+    
     @PostConstruct
     public void dadosiniciais(){
         clienteRepository.save(new Cliente(null, "Betera", "Rua Jaraguará"));
         clienteRepository.save(new Cliente(null, "Jerine", "Av. dos Lagos Secos"));
     }
-
+    /*
     @GetMapping("/testeCliente1") //-> /api/clientes/testeCliente1
     public String TesteClient(){
         return "Teste Cliente";
@@ -96,12 +96,27 @@ public class ClienteController {
         }
         return "Não encontrado ID: "+id;
     }
+    */
     //Uso de cliente Repository para comunicação o H2
-    @GetMapping("/listarClientes") // Já usa a variável clienteRepository para realizar a comunicação com banco
+    @GetMapping("") // Já usa a variável clienteRepository para realizar a comunicação com banco
     public List<Cliente> listarClientesH2() {
         //return listaDeCliente -usando o array;
         var clientes = clienteRepository.findAll();
-
         return clientes;
     }
+    @PostMapping("")
+    public Cliente createClienteH2(@RequestBody Cliente cliente) {
+        return clienteRepository.save(cliente);
+    }
+    
+    @PutMapping("/{id}")
+    public Cliente AtualizarClienteH2(@PathVariable String id, @RequestBody Cliente cliente) {
+        return clienteRepository.save(cliente);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deletarClienteH2(@PathVariable Long id){
+            clienteRepository.deleteById(id);
+    }
+    
 }
