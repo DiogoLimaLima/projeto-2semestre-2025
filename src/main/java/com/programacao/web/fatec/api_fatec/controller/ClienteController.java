@@ -6,6 +6,7 @@ import com.programacao.web.fatec.api_fatec.domain.cliente.ClienteRepository;
 import com.programacao.web.fatec.api_fatec.entities.Cliente;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.persistence.Id;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,14 +62,6 @@ public class ClienteController {
             return "Menor de idade";
         }
     }
-
-    @GetMapping("/listarClientes")
-    public List<Cliente> listarClientes() {
-        //return listaDeCliente -usando o array;
-        var clientes = clienteRepository.findAll();
-
-        return clientes;
-    }
     
     @PostMapping("")
     public String createCliente(@RequestBody String cliente) {
@@ -102,5 +95,13 @@ public class ClienteController {
             }
         }
         return "Não encontrado ID: "+id;
+    }
+    //Uso de cliente Repository para comunicação o H2
+    @GetMapping("/listarClientes") // Já usa a variável clienteRepository para realizar a comunicação com banco
+    public List<Cliente> listarClientesH2() {
+        //return listaDeCliente -usando o array;
+        var clientes = clienteRepository.findAll();
+
+        return clientes;
     }
 }
