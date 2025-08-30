@@ -45,6 +45,9 @@ Content-Type: application/json
 ###H2 Get
 GET http://localhost:8082/api/clientes
 
+###H2 Get com parâmetro para busca por Param
+GET http://localhost:8082/api/clientes/buscarPorIdOuNome/Be
+
 ###H2 Post
 POST http://localhost:8082/api/clientes
 Content-Type: application/json
@@ -58,9 +61,17 @@ PUT http://localhost:8082/api/clientes/3
 Content-Type: application/json
 
 {
-  "id": 3,
   "nome": "Leterino",
-  "endereco": "Colina muito plana mesmo"
+  "endereco": "Colina muito plana "
 }
 ###H2 Delete
 DELETE http://localhost:8082/api/clientes/4
+
+###H2 POST buscarPorIdOuNome
+POST http//localhost:8082/api/clientes/buscarPorIdeNome
+Content-Type: :application/json
+
+{
+  "id": 1,
+  "nome": null
+}

@@ -105,6 +105,23 @@ public class ClienteController {
         var clientes = clienteRepository.findAll();
         return clientes;
     }
+
+    @GetMapping("/buscarPorIdOuNome/{search}")
+    public List<Cliente> buscarPorIdOuNomeGenerico(@PathVariable String search) {
+        Long id = null;
+        try {
+            id = Long.parseLong(search);
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return clienteRepository.buscarPorIdOuNome(id, search);
+    }
+
+    @PostMapping("/buscarPorIdeNome")
+    public List<Cliente> buscarPorIdeNomeH2(@RequestBody Cliente cliente) {
+        return clienteRepository.buscarPorIdeNome(cliente.getId(), cliente.getNome());
+    }    
+
     @PostMapping("")
     public Cliente createClienteH2(@RequestBody Cliente cliente) {
         cliente.setId(null);
