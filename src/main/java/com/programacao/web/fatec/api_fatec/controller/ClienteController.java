@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -106,17 +107,33 @@ public class ClienteController {
     }
     @PostMapping("")
     public Cliente createClienteH2(@RequestBody Cliente cliente) {
-        return clienteRepository.save(cliente);
+        cliente.setId(null);
+        Cliente clienteCreated = clienteRepository.save(cliente);
+        return clienteCreated;
     }
     
     @PutMapping("/{id}")
-    public Cliente AtualizarClienteH2(@PathVariable String id, @RequestBody Cliente cliente) {
-        return clienteRepository.save(cliente);
+    public String AtualizarClienteH2(@PathVariable Long id, @RequestBody Cliente entity) {
+        //return clienteRepository.save(cliente);
+        Optional<Cliente> clienteEncontrado = clienteRepository.findById(id);
+        if (!clienteEncontrado.isPresent()) {
+            return String.format("Não encontrado ID: %s", id);
+        }
+        entity.setId(id);
+        clienteRepository.save(entity);
+        return "Cliente atualizado com sucesso";
     }
 
     @DeleteMapping("/{id}")
     public void deletarClienteH2(@PathVariable Long id){
+        clienteRepository.deleteById(id);
+        /*Método didático que usa um return do tipo String
+        Optional<Cliente> clienteEncontrado = clienteRepository.findById(id);
+        if (clienteEncontrado.isPresent()) {
             clienteRepository.deleteById(id);
+            return "Cliente Deletado";
+        }
+        return "Não encontrado ID: "+id;*/
     }
     
 }

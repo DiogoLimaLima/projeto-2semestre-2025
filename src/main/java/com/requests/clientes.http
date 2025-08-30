@@ -54,13 +54,13 @@ Content-Type: application/json
   "endereco": "Colina plana"
 }
 ###H2 Put
-PUT http://localhost:8082/api/clientes/5
+PUT http://localhost:8082/api/clientes/3
 Content-Type: application/json
 
 {
-  "id": 5,
+  "id": 3,
   "nome": "Leterino",
   "endereco": "Colina muito plana mesmo"
 }
 ###H2 Delete
-DELETE http://localhost:8082/api/clientes/3
+DELETE http://localhost:8082/api/clientes/4
