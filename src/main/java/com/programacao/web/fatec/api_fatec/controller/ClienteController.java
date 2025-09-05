@@ -2,8 +2,12 @@ package com.programacao.web.fatec.api_fatec.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.programacao.web.fatec.api_fatec.domain.cidade.CidadeRepository;
 import com.programacao.web.fatec.api_fatec.domain.cliente.ClienteRepository;
+import com.programacao.web.fatec.api_fatec.domain.cliente.ClienteService;
+import com.programacao.web.fatec.api_fatec.entities.Cidade;
 import com.programacao.web.fatec.api_fatec.entities.Cliente;
+import com.programacao.web.fatec.api_fatec.entities.Estado;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.Id;
@@ -25,26 +29,33 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RestController
 @RequestMapping("/api/clientes")
 public class ClienteController {
-    private final List<Cliente> listaDeCliente = new ArrayList<>();
 
     @Autowired
     private ClienteRepository clienteRepository;
+    @Autowired
+    private CidadeRepository cidadeRepository;
 
-    public ClienteController(){
-        listaDeCliente.add(new Cliente(1L, "Betera", "Rua Jaraguará"));
-        listaDeCliente.add(new Cliente(2L, "Jerine", "Av. dos Lagos Secos"));
-        //Exemplo set
-        //Cliente cliente2 = new Cliente();
-        //Cliente2.setId(2L);
-        //Cliente2.setNome("Jerine");
-        //listaDeCliente.add(Cliente2);
-    } 
-    
-    @PostConstruct
-    public void dadosiniciais(){
-        clienteRepository.save(new Cliente(null, "Betera", "Rua Jaraguará"));
-        clienteRepository.save(new Cliente(null, "Jerine", "Av. dos Lagos Secos"));
+    @Autowired
+    private ClienteService clienteService;
+
+     @PostConstruct()
+    public void dadosIniciais() {
+        // Criando 5 cidades de exemplo com diferentes estados
+        Cidade saoPaulo = cidadeRepository.save(new Cidade(null, "São Paulo", Estado.SP));
+        Cidade rioDeJaneiro = cidadeRepository.save(new Cidade(null, "Rio de Janeiro", Estado.RJ));
+        Cidade beloHorizonte = cidadeRepository.save(new Cidade(null, "Belo Horizonte", Estado.MG));
+        Cidade salvador = cidadeRepository.save(new Cidade(null, "Salvador", Estado.BA));
+        Cidade fortaleza = cidadeRepository.save(new Cidade(null, "Fortaleza", Estado.CE));
+
+        // Criando clientes associados às cidades
+        // Observe como o relacionamento é estabelecido passando a cidade como parâmetro
+        clienteRepository.save(new Cliente(null, "Danilo", "Av. Paulista, 1000", saoPaulo));
+        clienteRepository.save(new Cliente(null, "Maria", "Rua Copacabana, 500", rioDeJaneiro));
+        clienteRepository.save(new Cliente(null, "João", "Av. Afonso Pena, 123", beloHorizonte));
+        clienteRepository.save(new Cliente(null, "Ana", "Rua Chile, 45", salvador));
+        clienteRepository.save(new Cliente(null, "Pedro", "Av. Beira Mar, 789", fortaleza));
     }
+    
     /*
     @GetMapping("/testeCliente1") //-> /api/clientes/testeCliente1
     public String TesteClient(){
@@ -99,58 +110,35 @@ public class ClienteController {
     }
     */
     //Uso de cliente Repository para comunicação o H2
-    @GetMapping("") // Já usa a variável clienteRepository para realizar a comunicação com banco
+    @GetMapping("") // Retorna o cliente service para fazer a lista de clientes
     public List<Cliente> listarClientesH2() {
         //return listaDeCliente -usando o array;
-        var clientes = clienteRepository.findAll();
-        return clientes;
+        return clienteService.listarClientesH2();
     }
 
     @GetMapping("/buscarPorIdOuNome/{search}")
     public List<Cliente> buscarPorIdOuNomeGenerico(@PathVariable String search) {
-        Long id = null;
-        try {
-            id = Long.parseLong(search);
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
-        return clienteRepository.buscarPorIdOuNome(id, search);
+        return clienteService.buscarPorIdOuNomeGenerico(search);
     }
 
     @PostMapping("/buscarPorIdeNome")
     public List<Cliente> buscarPorIdeNomeH2(@RequestBody Cliente cliente) {
-        return clienteRepository.buscarPorIdeNome(cliente.getId(), cliente.getNome());
+        return clienteService.buscarPorIdeNomeH2(cliente);
     }    
 
     @PostMapping("")
     public Cliente createClienteH2(@RequestBody Cliente cliente) {
-        cliente.setId(null);
-        Cliente clienteCreated = clienteRepository.save(cliente);
-        return clienteCreated;
+        return clienteService.createClienteH2(cliente);
     }
     
     @PutMapping("/{id}")
     public String AtualizarClienteH2(@PathVariable Long id, @RequestBody Cliente entity) {
-        //return clienteRepository.save(cliente);
-        Optional<Cliente> clienteEncontrado = clienteRepository.findById(id);
-        if (!clienteEncontrado.isPresent()) {
-            return String.format("Não encontrado ID: %s", id);
-        }
-        entity.setId(id);
-        clienteRepository.save(entity);
-        return "Cliente atualizado com sucesso";
+        return clienteService.AtualizarClienteH2(id, entity);
     }
 
     @DeleteMapping("/{id}")
-    public void deletarClienteH2(@PathVariable Long id){
-        clienteRepository.deleteById(id);
-        /*Método didático que usa um return do tipo String
-        Optional<Cliente> clienteEncontrado = clienteRepository.findById(id);
-        if (clienteEncontrado.isPresent()) {
-            clienteRepository.deleteById(id);
-            return "Cliente Deletado";
-        }
-        return "Não encontrado ID: "+id;*/
+    public String deletarClienteH2(@PathVariable Long id){
+        return clienteService.deletarClienteH2(id);
     }
     
 }

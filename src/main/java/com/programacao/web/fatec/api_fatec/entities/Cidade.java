@@ -1,7 +1,5 @@
-package com.programacao.web.fatec.api_fatec.entities;
 
-import java.util.ArrayList;
-import java.util.List;
+package com.programacao.web.fatec.api_fatec.entities;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -19,6 +17,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Entidade que representa uma cidade no sistema.
+ * Uma cidade possui um id, um nome e um estado.
+ * Uma cidade pode estar relacionada a vários clientes (relacionamento 1:N).
+ */
 @Entity
 @Table(name = "cidades")
 @Getter
