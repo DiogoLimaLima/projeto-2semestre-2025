@@ -14,5 +14,5 @@ import java.util.List;
  * Estende JpaRepository para herdar operações CRUD básicas.
  */
 public interface CidadeRepository extends JpaRepository<Cidade, Long> {
-
+    List<Cidade> findByNome (String nome);
 }

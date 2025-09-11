@@ -1,5 +1,7 @@
 package com.programacao.web.fatec.api_fatec.entities;
 
+import org.springframework.web.bind.annotation.GetMapping;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -68,5 +70,4 @@ public class Cliente {
     public Long getCidadeId() {
         return cidade != null ? cidade.getId() : null;
     }
-
 }

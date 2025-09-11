@@ -1,6 +1,7 @@
 
 package com.programacao.web.fatec.api_fatec.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
@@ -31,7 +32,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Cidade {
+public class Cidade{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,7 +55,7 @@ public class Cidade {
      * Este lado do relacionamento será serializado normalmente.
      */
     @OneToMany(mappedBy = "cidade")
-    @JsonManagedReference
+    @JsonIgnoreProperties({"cidade", "cidade_id", "cidade_nome", "cidade_estado"})
     private List<Cliente> clientes = new ArrayList<>();
 
     /**
